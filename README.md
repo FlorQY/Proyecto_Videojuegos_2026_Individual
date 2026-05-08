@@ -1,3 +1,4 @@
+
 # UNO No Mercy
 
 Videojuego de cartas inspirado en la versión UNO No Mercy
@@ -22,9 +23,11 @@ El desarrollo se realiza utilizando Python y la librería Pygame, implementando 
 
 ## Tecnologías utilizadas
 
-- Lenguaje de porgramación: Python 3
+- Lenguaje de programación: Python 3
 - Libería: Pygame
 
 ## Estado del proyecto
 
 Actualmente en fase inicial de desarrollo.
+
+
