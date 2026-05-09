@@ -35,9 +35,44 @@ running = True
 while running:
 
     for event in pygame.event.get():
-
+    
         if event.type == pygame.QUIT:
             running = False
+
+        # Click del mouse
+        if event.type == pygame.MOUSEBUTTONDOWN:
+
+            mouse_pos = pygame.mouse.get_pos()
+            
+            # Click en el mazo
+            if deck_rect.collidepoint(mouse_pos):
+
+                if len(deck.cards) > 0:
+
+                    player_hand.append(
+                        deck.draw_card()
+                    )
+
+            # Revisar cartas del jugador
+            for card in player_hand:
+
+                # Detectar click sobre carta
+                if card.rect.collidepoint(mouse_pos):
+
+                    # Validar jugada
+                    if (
+                        card.color == center_card.color
+                        or
+                        card.value == center_card.value
+                    ):
+
+                        # Cambiar carta central
+                        center_card = card
+
+                        # Eliminar carta jugada
+                        player_hand.remove(card)
+
+                        break
 
     # Fondo
     screen.fill(BACKGROUND)
@@ -50,7 +85,6 @@ while running:
     pygame.draw.circle(screen, (180, 120, 0), (640, 360), 130, 12)
 
     # Carta central
-    # Colores UNO
     color_map = {
         "Red": (220, 50, 50),
         "Blue": (50, 80, 220),
@@ -85,7 +119,14 @@ while running:
     screen.blit(center_text, (632, 340))
 
     # Mazo
-    pygame.draw.rect(screen, BLACK, (280, 150, 100, 150), border_radius=10)
+    deck_rect = pygame.Rect(280, 150, 100, 150)
+
+    pygame.draw.rect(
+        screen,
+        BLACK,
+        deck_rect,
+        border_radius=10
+    )
 
     deck_text = font.render("UNO", True, WHITE)
     screen.blit(deck_text, (300, 210))
@@ -103,6 +144,10 @@ while running:
     x = 300
 
     for card in player_hand:
+        card.x = x
+        card.y = 520
+
+        card.update_rect()
 
         # Color según carta
         color_map = {
@@ -134,6 +179,26 @@ while running:
         screen.blit(value_text, (x + 40, 575))
 
         x += 95
+    
+    # Botón UNO
+    pygame.draw.circle(
+        screen,
+        (220, 40, 40),
+        (1180, 620),
+        45
+    )
+
+    pygame.draw.circle(
+        screen,
+        WHITE,
+        (1180, 620),
+        45,
+        4
+    )
+
+    uno_text = font.render("UNO", True, WHITE)
+
+    screen.blit(uno_text, (1153, 603))
 
     pygame.display.update()
 
