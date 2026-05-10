@@ -28,6 +28,16 @@ El desarrollo se realiza utilizando Python y la librería Pygame, implementando 
 
 ## Estado del proyecto
 
-Implementación de sistema de turnos y mecánicas básicas del juego.
+Actualmente el proyecto cuenta con:
 
+- Sistema de turnos funcional
+- Jugador principal interactivo
+- Bots automáticos básicos
+- Validación de jugadas
+- Robo de cartas
+- Carta central dinámica
+- Detección de victoria
+- Interfaz gráfica inicial en 2D
+
+Próximamente se implementarán cartas especiales, sistema UNO, monedas, ligas y mejoras visuales.
 

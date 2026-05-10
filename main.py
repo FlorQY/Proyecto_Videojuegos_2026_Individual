@@ -38,6 +38,7 @@ for i in range(7):
 center_card = deck.draw_card()
 current_turn = 0
 bot_timer = 0
+winner = None
 
 running = True
 
@@ -79,15 +80,19 @@ while running:
                         # Cambiar carta central
                         center_card = card
 
-                        # Eliminar carta jugada
                         player_hand.remove(card)
 
-                        # Pasar turno al BOT 1
-                        current_turn = 1
+                        # Verificar victoria
+                        if len(player_hand) == 0:
+                            winner = "PLAYER"
+
+                        else:
+                            # Pasar turno al BOT 1
+                            current_turn = 1
 
                         break
     # Turnos de bots
-    if current_turn != 0:
+    if current_turn != 0 and winner is None:
 
         bot_timer += 1
 
@@ -118,6 +123,18 @@ while running:
                     center_card = card
 
                     current_hand.remove(card)
+
+                    # Verificar victoria bot
+                    if len(current_hand) == 0:
+
+                        if current_turn == 1:
+                            winner = "BOT 1"
+
+                        elif current_turn == 2:
+                            winner = "BOT 2"
+
+                        else:
+                            winner = "BOT 3"
 
                     played = True
 
@@ -197,10 +214,24 @@ while running:
     deck_text = font.render("UNO", True, WHITE)
     screen.blit(deck_text, (300, 210))
 
+    # Colores según turno
+    bot1_color = WHITE
+    bot2_color = WHITE
+    bot3_color = WHITE
+
+    if current_turn == 1:
+        bot1_color = (255, 220, 0)
+
+    elif current_turn == 2:
+        bot2_color = (255, 220, 0)
+
+    elif current_turn == 3:
+        bot3_color = (255, 220, 0)
+
     # Jugadores IA
-    bot1 = font.render("BOT 1", True, WHITE)
-    bot2 = font.render("BOT 2", True, WHITE)
-    bot3 = font.render("BOT 3", True, WHITE)
+    bot1 = font.render("BOT 1", True, bot1_color)
+    bot2 = font.render("BOT 2", True, bot2_color)
+    bot3 = font.render("BOT 3", True, bot3_color)
 
     screen.blit(bot1, (50, 300))
     screen.blit(bot2, (800, 80))
@@ -331,6 +362,17 @@ while running:
     uno_text = font.render("UNO", True, WHITE)
 
     screen.blit(uno_text, (1153, 603))
+    
+    # Mostrar ganador
+    if winner is not None:
+
+        winner_text = font.render(
+            f"{winner} WINS!",
+            True,
+            WHITE
+        )
+
+        screen.blit(winner_text, (560, 180))
 
     pygame.display.update()
 
