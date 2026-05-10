@@ -24,11 +24,20 @@ font = pygame.font.SysFont("arial", 30)
 deck = Deck()
 
 player_hand = []
+bot1_hand = []
+bot2_hand = []
+bot3_hand = []
 
 for i in range(7):
+    
     player_hand.append(deck.draw_card())
+    bot1_hand.append(deck.draw_card())
+    bot2_hand.append(deck.draw_card())
+    bot3_hand.append(deck.draw_card())
 
 center_card = deck.draw_card()
+current_turn = 0
+bot_timer = 0
 
 running = True
 
@@ -40,7 +49,7 @@ while running:
             running = False
 
         # Click del mouse
-        if event.type == pygame.MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN and current_turn == 0:
 
             mouse_pos = pygame.mouse.get_pos()
             
@@ -52,6 +61,7 @@ while running:
                     player_hand.append(
                         deck.draw_card()
                     )
+                    current_turn = 1
 
             # Revisar cartas del jugador
             for card in player_hand:
@@ -72,8 +82,64 @@ while running:
                         # Eliminar carta jugada
                         player_hand.remove(card)
 
-                        break
+                        # Pasar turno al BOT 1
+                        current_turn = 1
 
+                        break
+    # Turnos de bots
+    if current_turn != 0:
+
+        bot_timer += 1
+
+        # Esperar un poco antes de jugar
+        if bot_timer >= 60:
+
+            # Elegir mano según turno
+            if current_turn == 1:
+                current_hand = bot1_hand
+
+            elif current_turn == 2:
+                current_hand = bot2_hand
+
+            else:
+                current_hand = bot3_hand
+
+            played = False
+
+            # Buscar carta válida
+            for card in current_hand:
+
+                if (
+                    card.color == center_card.color
+                    or
+                    card.value == center_card.value
+                ):
+
+                    center_card = card
+
+                    current_hand.remove(card)
+
+                    played = True
+
+                    break
+
+            # Si no tiene carta válida, roba
+            if not played:
+
+                if len(deck.cards) > 0:
+
+                    current_hand.append(
+                        deck.draw_card()
+                    )
+
+            # Siguiente turno
+            current_turn += 1
+
+            if current_turn > 3:
+                current_turn = 0
+
+            # Reiniciar timer
+            bot_timer = 0                
     # Fondo
     screen.fill(BACKGROUND)
 
@@ -136,9 +202,75 @@ while running:
     bot2 = font.render("BOT 2", True, WHITE)
     bot3 = font.render("BOT 3", True, WHITE)
 
-    screen.blit(bot1, (80, 300))
-    screen.blit(bot2, (580, 80))
-    screen.blit(bot3, (1080, 300))
+    screen.blit(bot1, (50, 300))
+    screen.blit(bot2, (800, 80))
+    screen.blit(bot3, (1160, 300))
+    
+    # Cartas BOT 2
+    x_bot2 = 450
+
+    for card in bot2_hand:
+
+        pygame.draw.rect(
+            screen,
+            BLACK,
+            (x_bot2, 40, 60, 90),
+            border_radius=10
+        )
+
+        pygame.draw.rect(
+            screen,
+            WHITE,
+            (x_bot2, 40, 60, 90),
+            2,
+            border_radius=10
+        )
+
+        x_bot2 += 35
+    
+    # Cartas BOT 1
+    y_bot1 = 220
+
+    for card in bot1_hand:
+
+        pygame.draw.rect(
+            screen,
+            BLACK,
+            (150, y_bot1, 60, 90),
+            border_radius=10
+        )
+
+        pygame.draw.rect(
+            screen,
+            WHITE,
+            (150, y_bot1, 60, 90),
+            2,
+            border_radius=10
+        )
+
+        y_bot1 += 25
+        
+    # Cartas BOT 3
+    y_bot3 = 220
+
+    for card in bot3_hand:
+
+        pygame.draw.rect(
+            screen,
+            BLACK,
+            (1050, y_bot3, 60, 90),
+            border_radius=10
+        )
+
+        pygame.draw.rect(
+            screen,
+            WHITE,
+            (1050, y_bot3, 60, 90),
+            2,
+            border_radius=10
+        )
+
+        y_bot3 += 25
 
     # Cartas del jugador
     x = 300

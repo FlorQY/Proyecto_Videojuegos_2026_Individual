@@ -28,6 +28,6 @@ El desarrollo se realiza utilizando Python y la librería Pygame, implementando 
 
 ## Estado del proyecto
 
-Actualmente en fase inicial de desarrollo.
+Implementación de sistema de turnos y mecánicas básicas del juego.
 
 
